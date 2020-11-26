@@ -111,30 +111,27 @@ app.get("/about", function(req, res){
 
 app.post("/delete",function(req,res){
  const checkeditemID=req.body.checkbox;
-const listName=req.body.listName;
 
-if(listName==="Today")
-{
+ const listName = req.body.listName;
 
-   Item.findByIdAndRemove( checkeditemID , function (err) {
-    if(!err){
-  console.log("Sucessfuly deleted");
-res.redirect("/");
-    }
-
-});
+if(listName ==="Today"){
+  Item.findByIdAndRemove( checkeditemID , function (err) {
+    if(err)
+    console.log(err);
+    else
+    {console.log("sucessful deletion");
+ res.redirect("/");
+ }
+  });
 }
-else
-{
-  List.findOneAndUpdate({name:listName},{$pull:{items:{_id:checkeditemID}}},function(err,foundList){
-    if(!err){
-      res.redirect("/"+listName);
+else{
+  List.findOneAndUpdate({name: listName},{$pull :{items: {_id: checkeditemID}}} , function(err , foundList){
+    if(!err)
+    {
+      res.redirect("/" + listName);
     }
   });
 }
-
-
-
 });
 
 app.listen(process.env.port||3000, function() {
